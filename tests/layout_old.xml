@@ -1,0 +1,59 @@
+<layout-specification>
+    <levels>
+        <level order="0" size="4800" place-name="thread_app">
+            <analyses>
+                <analysis name="DatatypePredefs" group="MUST_Resource" />
+                <analysis name="CommPredefs" group="MUST_Resource" />
+                <analysis name="OpenMPadapter"   group="OpenMP"/>
+                <analysis name="OpenMPsanity"    group="OpenMPsanity"/>
+                <analysis name="OpenMPlocks"     group="OpenMPlocks"/>
+                <analysis name="OpenMPnestlocks" group="OpenMPlocks"/>
+                <analysis name="OpenMPSynchPropagate" group="OpenMPClock" />
+            </analyses>
+        </level>
+        <level order="1" size="2" place-name="thread_place">
+            <analyses>
+            </analyses>
+        </level>
+        <level order="2" size="1" place-name="mpi_place">
+            <analyses>
+                <analysis name="MsgLoggerHtml" group="MUST_Base" />
+                <analysis name="MsgLoggerStdOut" group="MUST_Base" />
+            </analyses>
+        </level>
+    </levels>
+    <communications>
+        <default>
+            <comm-strategy name="CStratSimpleUp">
+                <settings></settings>
+            </comm-strategy>
+            <comm-protocol name="CProtMpiSplited">
+                <settings></settings>
+            </comm-protocol>
+        </default>
+        <connection top-level="1" bottom-level="0">
+            <comm-strategy name="CStratSimpleUp">
+                <settings></settings>
+            </comm-strategy>
+            <comm-protocol name="CProtSharedMemory">
+                <settings></settings>
+            </comm-protocol>
+        </connection>
+        <connection top-level="2" bottom-level="1">
+            <comm-strategy name="CStratSimpleUp">
+                <settings></settings>
+            </comm-strategy>
+            <comm-protocol name="CProtMpiSplited">
+                <settings></settings>
+            </comm-protocol>
+        </connection>
+        <connection top-level="1" bottom-level="1">
+            <comm-strategy name="CStratIsendIntra">
+                <settings></settings>
+            </comm-strategy>
+            <comm-protocol name="CProtMpiSplited">
+                <settings></settings>
+            </comm-protocol>
+        </connection>
+    </communications>
+</layout-specification>
