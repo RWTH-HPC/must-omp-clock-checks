@@ -4,8 +4,8 @@
 // RUN: %s.exe 2>&1 > %s.%must-version.log || true
 // RUN: cat %s.%must-version.log | %filecheck --check-prefix=CHECK-%must-version --implicit-check-not 'BAD TERMINATION' %s
 
-// CHECK-clock_based-DAG: [MUST-REPORT] Error: from: call {{.*}}: Found concurrent MPI collectives that use the same communicator.
-// CHECK-counter_based-DAG: [MUST-REPORT] Error:
+// CHECK-clock-DAG: [MUST-REPORT] Error: from: call {{.*}}: Found concurrent MPI collectives that use the same communicator.
+// CHECK-counter-DAG: [MUST-REPORT] Error:
 
 // #include "nondeterminism.h"
 #include <mpi.h>

@@ -3,14 +3,14 @@
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
 
-corrbench_true_positives_counter_based=0
-corrbench_true_negatives_counter_based=0
-corrbench_false_positives_counter_based=0
-corrbench_false_negatives_counter_based=0
-corrbench_true_positives_clock_based=0
-corrbench_true_negatives_clock_based=0
-corrbench_false_positives_clock_based=0
-corrbench_false_negatives_clock_based=0
+corrbench_true_positives_counter=0
+corrbench_true_negatives_counter=0
+corrbench_false_positives_counter=0
+corrbench_false_negatives_counter=0
+corrbench_true_positives_clock=0
+corrbench_true_negatives_clock=0
+corrbench_false_positives_clock=0
+corrbench_false_negatives_clock=0
 
 
 corrbench_correct_dirs=(
@@ -23,14 +23,14 @@ corrbench_erroneous_dirs=(
     "./MPI-Corrbench/threading/erroneous"
 )
 
-own_true_positives_counter_based=0
-own_true_negatives_counter_based=0
-own_false_positives_counter_based=0
-own_false_negatives_counter_based=0
-own_true_positives_clock_based=0
-own_true_negatives_clock_based=0
-own_false_positives_clock_based=0
-own_false_negatives_clock_based=0
+own_true_positives_counter=0
+own_true_negatives_counter=0
+own_false_positives_counter=0
+own_false_negatives_counter=0
+own_true_positives_clock=0
+own_true_negatives_clock=0
+own_false_positives_clock=0
+own_false_negatives_clock=0
 
 own_correct_dirs=(
     "./own_checks/ConRecv/correct"
@@ -40,13 +40,13 @@ own_correct_dirs=(
 )
 
 own_erroneous_dirs=(
-    "./own_checks/ConComm/erroneous"
     "./own_checks/ConRecv/erroneous"
+    "./own_checks/ConComm/erroneous"
     "./own_checks/RecvProbe/erroneous"
     "./own_checks/ThreadLevel/erroneous"
 )
 
-for version in "counter_based" "clock_based"; do
+for version in "counter" "clock"; do
     corrbench_true_negatives=0
     corrbench_true_positives=0
     corrbench_false_negatives=0
@@ -98,21 +98,14 @@ for version in "counter_based" "clock_based"; do
 done
 
 echo "========================="
-echo "Counter-based Must Version"
+echo "Classification Results"
 echo "========================="
-corrbench_total_counter_based=$((corrbench_true_negatives_counter_based + corrbench_true_positives_counter_based + corrbench_false_negatives_counter_based + corrbench_false_positives_counter_based))
-own_total_counter_based=$((own_true_negatives_counter_based + own_true_positives_counter_based + own_false_negatives_counter_based + own_false_positives_counter_based))
-echo "Test Suite;Total;TP;FP;TN;FN"
-echo "Own;$own_total_counter_based;$own_true_positives_counter_based;$own_false_positives_counter_based;$own_true_negatives_counter_based;$own_false_negatives_counter_based" 
-echo "Corrbench;$corrbench_total_counter_based;$corrbench_true_positives_counter_based;$corrbench_false_positives_counter_based;$corrbench_true_negatives_counter_based;$corrbench_false_negatives_counter_based" 
-
-echo "========================="
-echo "Clock-based Must Version"
-echo "========================="
-corrbench_total_clock_based=$((corrbench_true_negatives_clock_based + corrbench_true_positives_clock_based + corrbench_false_negatives_clock_based + corrbench_false_positives_clock_based))
-own_total_clock_based=$((own_true_negatives_clock_based + own_true_positives_clock_based + own_false_negatives_clock_based + own_false_positives_clock_based))
-echo "Test Suite;Total;TP;FP;TN;FN"
-echo "Own;$own_total_clock_based;$own_true_positives_clock_based;$own_false_positives_clock_based;$own_true_negatives_clock_based;$own_false_negatives_clock_based" 
-echo "Corrbench;$corrbench_total_clock_based;$corrbench_true_positives_clock_based;$corrbench_false_positives_clock_based;$corrbench_true_negatives_clock_based;$corrbench_false_negatives_clock_based" 
-
-
+corrbench_total_counter=$((corrbench_true_negatives_counter + corrbench_true_positives_counter + corrbench_false_negatives_counter + corrbench_false_positives_counter))
+own_total_counter=$((own_true_negatives_counter + own_true_positives_counter + own_false_negatives_counter + own_false_positives_counter))
+corrbench_total_clock=$((corrbench_true_negatives_clock + corrbench_true_positives_clock + corrbench_false_negatives_clock + corrbench_false_positives_clock))
+own_total_clock=$((own_true_negatives_clock + own_true_positives_clock + own_false_negatives_clock + own_false_positives_clock))
+echo "Analyses;Test Suite;Total;TP;FP;TN;FN"
+echo "Counter-based;Own;$own_total_counter;$own_true_positives_counter;$own_false_positives_counter;$own_true_negatives_counter;$own_false_negatives_counter" 
+echo "Clock-based;Own;$own_total_clock;$own_true_positives_clock;$own_false_positives_clock;$own_true_negatives_clock;$own_false_negatives_clock" 
+echo "Counter-based;Corrbench;$corrbench_total_counter;$corrbench_true_positives_counter;$corrbench_false_positives_counter;$corrbench_true_negatives_counter;$corrbench_false_negatives_counter" 
+echo "Clock-based;Corrbench;$corrbench_total_clock;$corrbench_true_positives_clock;$corrbench_false_positives_clock;$corrbench_true_negatives_clock;$corrbench_false_negatives_clock" 
