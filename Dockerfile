@@ -85,6 +85,7 @@ RUN cd MUST-v1.9-omp-checks && \
 
 # Copy test cases in container
 COPY --chown=user:user tests /home/user/tests
+RUN chmod +x /home/user/tests/run_tests.sh
 
 ENV PATH="/home/user/must/bin:$PATH"
 
