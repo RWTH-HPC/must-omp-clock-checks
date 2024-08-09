@@ -1,7 +1,7 @@
 // RUN: mpicc -g -fopenmp %s -o %s.exe 
-// RUN: env OMP_NUM_THREADS=4 mustrun --must:mpimode MPMD --must:openmp --must:layout %root-dir/%omp-layout \
-// RUN: %s.exe 2>&1 > %s.log || true
-// RUN: cat %s.log | %filecheck  --implicit-check-not '[MUST-REPORT]{{.*(Error|ERROR|Warning|WARNING)}}' --implicit-check-not 'BAD TERMINATION' %s
+// RUN: env OMP_NUM_THREADS=2 mustrun --must:mpimode MPMD --must:openmp --must:layout %root-dir/%omp-layout \
+// RUN: %s.exe 2>&1 > %s.%must-version.log || true
+// RUN: cat %s.%must-version.log | %filecheck  --implicit-check-not '[MUST-REPORT]{{.*(Error|ERROR|Warning|WARNING)}}' --implicit-check-not 'BAD TERMINATION' %s
 
 
 #include "../../nondeterminism.h"
@@ -36,18 +36,19 @@ int main(int argc, char *argv[]) {
   if (myRank == 0) {
 #pragma omp parallel
     {
-#pragma omp task
+#pragma omp single 
+    {
+#pragma omp task depend(inout: myRank)
       {
-#pragma omp critical
         MPI_Barrier(MPI_COMM_WORLD);
       }
-#pragma omp task
+#pragma omp task depend(inout: myRank)
       {
         int *buffer = malloc(BUFFER_LENGTH_BYTE);
-#pragma omp critical
         MPI_Bcast(buffer, BUFFER_LENGTH_INT, MPI_INT, 0, MPI_COMM_WORLD);
         free(buffer);
       }
+    }
     }  // end parallel
   }
 

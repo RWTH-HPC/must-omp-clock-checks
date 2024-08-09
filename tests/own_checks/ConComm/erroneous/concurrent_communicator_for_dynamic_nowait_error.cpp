@@ -15,8 +15,11 @@
 
 // RUN: mpicxx -g -fopenmp %s -o %s.exe 
 // RUN: env OMP_NUM_THREADS=4 mustrun --must:mpimode MPMD --must:openmp --must:layout %root-dir/%omp-layout \
-// RUN: %s.exe 2>&1 > %s.log || true
-// RUN: cat %s.log | %filecheck --implicit-check-not 'BAD TERMINATION' %s
+// RUN: %s.exe 2>&1 > %s.%must-version.log || true
+// RUN: cat %s.%must-version.log | %filecheck --check-prefix=CHECK-%must-version --implicit-check-not 'BAD TERMINATION' %s
+
+// CHECK-clock_based-DAG: [MUST-REPORT] Error: from: call MPI_Barrier@{{.*}}: Found concurrent MPI collectives that use the same communicator.
+// CHECK-counter_based-DAG: [MUST-REPORT] Error:
 
 #include <mpi.h>
 #include <omp.h>
@@ -43,7 +46,6 @@ int main(int argc, char** argv)
         for (int j = 0; j < N; j++) {
 #pragma omp for nowait schedule(dynamic)
             for (int i = 0; i < omp_get_num_threads(); i++) {
-                // CHECK-DAG: Error
                 MPI_Barrier(comms[i]);
             }
         }

@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM debian:12
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Berlin
@@ -61,6 +61,8 @@ ENV MPICH_CC=clang
 ENV MPICH_CXX=clang++
 ENV OMPI_CC=clang
 ENV OMPI_CXX=clang++
+ENV CC=mpicc
+ENV CXX=mpicxx
 
 # Run as non-privileged user
 RUN     useradd -ms /bin/bash user
