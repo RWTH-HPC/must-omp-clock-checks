@@ -35,6 +35,7 @@ To run all test cases for the counter-based and clock-based analyses, run:
 ```
 docker run -it must-omp-clock ./tests/run_tests.sh
 ```
+(Make sure that `run_tests.sh` uses LF line endings and not CRLF, otherwise Linux will provide the error message "No such file or directory")
 
 To start a specific test case, run:
 ```
