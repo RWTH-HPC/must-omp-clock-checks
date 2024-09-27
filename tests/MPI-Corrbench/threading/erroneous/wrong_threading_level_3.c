@@ -1,11 +1,11 @@
 
 // RUN: mpicc -g -fopenmp %s -o %s.exe 
-// RUN: env OMP_NUM_THREADS=2 mustrun --must:mpimode MPMD --must:openmp --must:layout %root-dir/%omp-layout \
+// RUN: env OMP_NUM_THREADS=2 mustrun --must:mpimode MPMD --must:instant-logging warning --must:openmp --must:layout %root-dir/%omp-layout \
 // RUN: %s.exe 2>&1 > %s.%must-version.log || true
 // RUN: cat %s.%must-version.log | %filecheck --check-prefix=CHECK-%must-version --implicit-check-not 'BAD TERMINATION' %s
 
-// CHECK-clock-DAG: [MUST-REPORT] Error: from: call {{[MPI_Isend@|MPI_Recv@].*}}: Found concurrent mpi calls while MPI_THREAD_SERIALIZED was requested.
-// CHECK-counter-DAG: [MUST-REPORT] Error: from: call {{[MPI_Isend@|MPI_Recv@].*}}: Multiple threads call MPI functions simultaneously while you required MPI_THREAD_SERIALIZED.
+// CHECK-clock-DAG: [MUST-REPORT] Error: from: call {{[MPI_Send@|MPI_Recv@].*}}: Found concurrent mpi calls while MPI_THREAD_SERIALIZED was requested.
+// CHECK-counter-DAG: [MUST-REPORT] Error: from: call {{[MPI_Send@|MPI_Recv@].*}}: Multiple threads call MPI functions simultaneously while you required MPI_THREAD_SERIALIZED.
 
 #include <mpi.h>
 #include <omp.h>

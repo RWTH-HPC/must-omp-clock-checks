@@ -1,6 +1,6 @@
 
 // RUN: mpicc -g -fopenmp %s -o %s.exe 
-// RUN: env OMP_NUM_THREADS=4 mustrun --must:mpimode MPMD --must:openmp --must:layout %root-dir/%omp-layout \
+// RUN: env OMP_NUM_THREADS=4 mustrun --must:instant-logging warning --must:openmp --must:layout %root-dir/%omp-layout \
 // RUN: %s.exe 2>&1 > %s.%must-version.log || true
 // RUN: cat %s.%must-version.log | %filecheck --check-prefix=CHECK-%must-version --implicit-check-not 'BAD TERMINATION' %s
 

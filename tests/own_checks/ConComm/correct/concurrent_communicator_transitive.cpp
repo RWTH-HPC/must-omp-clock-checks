@@ -7,8 +7,8 @@
  * @file
  * A test for usage of threading level MPI_THREAD_SERIALIZED.
  *
- * Requests the threading level MPI_THREAD_SERIALIZED and correctly performs all MPI calls in
- * critical sections.
+ * Requests the threading level MPI_THREAD_SERIALIZED and tries to perform MPI calls from multiple
+ * threads that run concurrently.
  *
  * This is a test for the analysis group ThreadSanity.
  */
@@ -24,29 +24,29 @@
 int main(int argc, char** argv)
 {
     int provided = -1;
-    int thread_support, size, rank;
-    MPI_Init_thread(&argc, &argv, MPI_THREAD_SERIALIZED, &provided);
+    int size, rank;
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm comm1, comm2;
+    MPI_Comm_dup(MPI_COMM_WORLD, &comm1);
+    MPI_Comm_dup(MPI_COMM_WORLD, &comm2);
 
+    if (rank == 0) {
 #pragma omp parallel
-    {
-        int tid = omp_get_thread_num();
-        int send_buffer = tid;
-        int recv_buffer = 0;
-        MPI_Request request;
-#pragma omp critical
         {
-            MPI_Isend(&send_buffer, 1, MPI_INT, (rank + 1) % size, tid, MPI_COMM_WORLD, &request);
+            int tid = omp_get_thread_num();
+            if (tid == 0) {
+                MPI_Barrier(comm1);
+            } else if (tid == 1) {
+                MPI_Barrier(comm2);
+                MPI_Barrier(comm1);
+            }
         }
-#pragma omp critical
-        {
-            MPI_Recv(&recv_buffer, 1, MPI_INT, ((rank - 1)+size) % size, tid, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        }
-#pragma omp critical
-        {
-            MPI_Wait(&request, MPI_STATUS_IGNORE);
-        }
+    } else if (rank == 1) {
+        MPI_Barrier(comm1);
+        MPI_Barrier(comm2);
+        MPI_Barrier(comm1);
     }
 
     MPI_Finalize();

@@ -12,11 +12,6 @@
             <analyses>
                 <analysis name="OpenMPClock" group="OpenMPClock" />
                 <analysis name="ThreadSanity" group="OpenMPClock" />
-            </analyses>
-        </level>
-        <level order="2" size="1" place-name="mpi_place">
-            <analyses>
-                <analysis name="MsgLoggerHtml" group="MUST_Base" />
                 <analysis name="MsgLoggerStdOut" group="MUST_Base" />
             </analyses>
         </level>
@@ -35,22 +30,6 @@
                 <settings></settings>
             </comm-strategy>
             <comm-protocol name="CProtSharedMemory">
-                <settings></settings>
-            </comm-protocol>
-        </connection>
-        <connection top-level="2" bottom-level="1">
-            <comm-strategy name="CStratSimpleUp">
-                <settings></settings>
-            </comm-strategy>
-            <comm-protocol name="CProtMpiSplited">
-                <settings></settings>
-            </comm-protocol>
-        </connection>
-        <connection top-level="1" bottom-level="1">
-            <comm-strategy name="CStratIsendIntra">
-                <settings></settings>
-            </comm-strategy>
-            <comm-protocol name="CProtMpiSplited">
                 <settings></settings>
             </comm-protocol>
         </connection>

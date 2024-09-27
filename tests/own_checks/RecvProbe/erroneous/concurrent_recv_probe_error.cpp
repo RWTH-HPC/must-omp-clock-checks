@@ -14,12 +14,12 @@
 
 
 // RUN: mpicxx -g -fopenmp %s -o %s.exe 
-// RUN: env OMP_NUM_THREADS=4 mustrun --must:mpimode MPMD --must:openmp --must:layout %root-dir/%omp-layout \
+// RUN: env OMP_NUM_THREADS=4 mustrun --must:instant-logging warning --must:openmp --must:layout %root-dir/%omp-layout \
 // RUN: %s.exe 2>&1 > %s.%must-version.log || true
 // RUN: cat %s.%must-version.log | %filecheck --check-prefix=CHECK-%must-version --implicit-check-not 'BAD TERMINATION' %s
 
-// CHECK-clock-DAG: [MUST-REPORT] Error: from: call MPI_Recv@{{.*}}: Found concurrent MPI receive and probe 
-// CHECK-counter-DAG: [MUST-REPORT] Error:
+// CHECK-clock-DAG: [MUST-REPORT] Warning: from: call MPI_Recv@{{.*}}: Found concurrent MPI receive and probe 
+// CHECK-counter-DAG: [MUST-REPORT] {{[Warning|Error]}}:
 
 #include <mpi.h>
 #include <omp.h>
