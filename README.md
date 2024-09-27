@@ -14,13 +14,6 @@ And the single test case from MPI-CorrBench:
 
 The `ThreadLevel_serialized_many_tasks_error.cpp` test case performs many concurrent MPI calls and is more consistently classified as TP. The other four test cases are not consistently classified as TP or FN.
 
-Additionally, some erroneous MPI-CorrBench test cases may crash before MUST reports the error, and may then be classified as FN. These test cases include:
-
-- `erroneous/deadlock_probe_2.cpp`
-- `erroneous/two_collectives_3.cpp`
-- `erroneous/two_collectives_4.cpp`
-
-
 ## Building Docker Container
 The docker container installs MPICH v4.0.2, Clang v15.0.6, MUST, and LLVM lit.
 To build the container, run in the root directory:
